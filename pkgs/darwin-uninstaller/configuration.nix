@@ -28,12 +28,37 @@ with lib;
         rm /etc/static
     fi
 
+    if test -L /etc/bashrc; then
+        cp ${./bashrc} /etc/bashrc
+    fi
+    if test -L /etc/zshenv; then
+        rm /etc/zshenv
+    fi
+    if test -L /etc/zshrc; then
+        cp ${./zshrc} /etc/zshrc
+    fi
+    if test -L /etc/zprofile; then
+        cp ${./zprofile} /etc/zprofile
+    fi
+
     if test -O /nix/store; then
         l=$(readlink /Library/LaunchDaemons/org.nixos.nix-daemon.plist) || true
         if test "$l" != "/nix/var/nix/profiles/default/Library/LaunchDaemons/org.nixos.nix-daemon.plist"; then
             sudo launchctl remove org.nixos.nix-daemon 2> /dev/null || true
             sudo ln -sfn /nix/var/nix/profiles/default/Library/LaunchDaemons/org.nixos.nix-daemon.plist /Library/LaunchDaemons/org.nixos.nix-daemon.plist
             sudo launchctl load -w /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+        fi
+
+        if ! grep -q etc/profile.d/nix-daemon.sh /etc/zshrc; then
+            echo >&2 "Found no nix-daemon.sh reference in /etc/zshrc"
+            echo >&2 "add this snippet back to /etc/zshrc:"
+            echo >&2
+            echo >&2 "    # Nix"
+            echo >&2 "    if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then"
+            echo >&2 "      . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'"
+            echo >&2 "    fi"
+            echo >&2 "    # End Nix"
+            echo >&2
         fi
 
         if ! grep -q etc/profile.d/nix-daemon.sh /etc/bashrc; then

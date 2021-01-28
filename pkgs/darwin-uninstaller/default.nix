@@ -90,6 +90,14 @@ stdenv.mkDerivation {
         ! test -e ~/.nix-defexpr/channels/darwin
         echo >&2 "checking /etc"
         ! test -e /etc/static
+        echo >&2 "checking /etc/bashrc"
+        ! readlink /etc/bashrc
+        echo >&2 "checking /etc/zshenv"
+        ! test -e /etc/zshenv
+        echo >&2 "checking /etc/zshrc"
+        ! readlink /etc/zshrc
+        echo >&2 "checking /etc/zprofile"
+        ! readlink /etc/zprofile
         echo >&2 "checking /run/current-system"
         ! test -e /run/current-system
         echo >&2 "checking nix-daemon service (assuming a multi-user install)"

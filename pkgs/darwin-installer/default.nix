@@ -123,12 +123,14 @@ stdenv.mkDerivation {
         echo >&2 "checking /etc"
         readlink /etc/static
         test -e /etc/static
-        echo >&2 "checking /etc/static in bashrc"
+        echo >&2 "checking /etc/bashrc"
+        readlink /etc/bashrc
         cat /etc/bashrc
-        grep /etc/static/bashrc /etc/bashrc
-        echo >&2 "checking /etc/static in zshrc"
+        grep __ETC_BASHRC_SOURCED /etc/bashrc
+        echo >&2 "checking /etc/zshrc"
+        readlink /etc/zshrc
         cat /etc/zshrc
-        grep /etc/static/zshrc /etc/zshrc
+        grep __ETC_ZSHRC_SOURCED /etc/zshrc
         echo >&2 "checking profile"
         cat /etc/profile
         grep -v nix-daemon.sh /etc/profile

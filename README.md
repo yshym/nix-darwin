@@ -18,8 +18,14 @@ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
 > Either modify the existing file to source/import the one from `/etc/static` or remove it. Some examples:
 
 - `mv /etc/bashrc /etc/bashrc.orig`
+- `mv /etc/zshenv /etc/zshenv.orig`
+- `mv /etc/zshrc /etc/zshrc.orig`
+
+or
+
 - `echo 'if test -e /etc/static/bashrc; then . /etc/static/bashrc; fi' | sudo tee -a /etc/bashrc`
-- `echo 'if test -e /etc/static/bashrc; then . /etc/static/bashrc; fi' | tee -a ~/.bashrc`
+- `echo 'if test -e /etc/static/zshenv; then . /etc/static/zshenv; fi' | sudo tee -a /etc/zshenv`
+- `echo 'if test -e /etc/static/zshrc; then . /etc/static/zshrc; fi' | sudo tee -a /etc/zshrc`
 
 ## Updating
 
