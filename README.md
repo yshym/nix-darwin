@@ -13,7 +13,7 @@ nix-darwin is built up around [Nixpkgs](https://github.com/NixOS/nixpkgs), quite
 
 To install nix-darwin, a working installation of [Nix](https://github.com/NixOS/nix#installation) is required.
 
-> NOTE: Using `darwin-installer` is no longer necessary on flake based systems.
+If you wish to use nix-darwin with flakes, please refer to the [flakes](#flakes) section.
 
 ```bash
 nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
@@ -69,10 +69,9 @@ Configuration lives in `~/.nixpkgs/darwin-configuration.nix`. Check out
 }
 ```
 
-## Flakes (experimental)
+## Flakes
 
-There is also preliminary support for building your configuration using a [flake](https://nixos.wiki/wiki/Flakes).  This
-is mostly based on the flake support that was added to NixOS.
+nix-darwin aims for both non-flake and flake configurations to be well supported despite flakes being an experimental feature in Nix.
 
 ### Step 1. Creating `flake.nix`
 
@@ -105,7 +104,7 @@ Add the following to `flake.nix` in the same folder as `configuration.nix`:
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.05-darwin";
-    nix-darwin.url = "github:LnL7/nix-darwin/master";
+    nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -173,7 +172,7 @@ export NIX_PATH=darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/da
 cp ~/.nix-defexpr/darwin/modules/examples/simple.nix ~/.nixpkgs/darwin-configuration.nix
 
 # you can also use this to rebootstrap nix-darwin in case
-# darwin-rebuild is to old to activate the system.
+# darwin-rebuild is too old to activate the system.
 $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
 $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
 
